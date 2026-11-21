@@ -34,7 +34,7 @@ button[disabled]{opacity:.6;cursor:wait}
 </form>
 <script>
 {
-const SALT='72b43186e62a7b04f922321be57571cf',ITER=310000,MAN='d82c86f1d27d',CHECK='9c5f94797a9aba4aeecbd8f1b85f7b4a2b6f06469c11487e48655640ff234b3e93ab4cee16b743e693ebac',KEYNAME='rw-key-'+SALT.slice(0,8);
+const SALT='c4183fff3bee74d45c6fcc691217bf5b',ITER=310000,MAN='f554e919a63a130d',CHECK='f8c18f7e4907bfba3061f2ea46be2b6607b68d5b4124f18134cc6ebc88a2f84f680744d5e2f22d78180eaf',KEYNAME='rw-key-'+SALT.slice(0,8);
 const hex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
 const b64=u=>btoa(String.fromCharCode(...u)),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const TYPES={ttf:'font/ttf',webp:'image/webp',png:'image/png',jpg:'image/jpeg'};
@@ -44,9 +44,10 @@ async function dec(key,buf){const u=new Uint8Array(buf);return crypto.subtle.dec
 const get=async id=>{const r=await fetch('d/'+id+'.bin',{cache:'no-cache'});if(!r.ok)throw new Error('net');return r.arrayBuffer()};
 async function open(key){
   await dec(key,hex(CHECK));
-  const man=JSON.parse(new TextDecoder().decode(await dec(key,await get(MAN))));
-  const urls={};await Promise.all(Object.entries(man.files).map(async([path,id])=>{const data=await dec(key,await get(id));const ext=path.split('.').pop();urls[path]=URL.createObjectURL(new Blob([data],{type:TYPES[ext]||'application/octet-stream'}))}));
-  let html=new TextDecoder().decode(await dec(key,await get(man.app)));
+  const all=new Uint8Array(await dec(key,await get(MAN)));const hl=new DataView(all.buffer).getUint32(0);
+  const idx=JSON.parse(new TextDecoder().decode(all.subarray(4,4+hl)));const base=4+hl;const part=k=>all.subarray(base+idx[k][0],base+idx[k][0]+idx[k][1]);
+  const urls={};for(const p of Object.keys(idx)){if(p==='app')continue;const ext=p.split('.').pop();urls[p]=URL.createObjectURL(new Blob([part(p)],{type:TYPES[ext]||'application/octet-stream'}))}
+  let html=new TextDecoder().decode(part('app'));
   for(const[p,u]of Object.entries(urls))html=html.split(p).join(u);
   html=html.replace('<head>','<head><meta name="robots" content="noindex, nofollow, noarchive">');
   document.open();document.write(html);document.close()}
