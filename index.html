@@ -34,10 +34,10 @@ button[disabled]{opacity:.6;cursor:wait}
 </form>
 <script>
 {
-const SALT='ef826197f745d0d9b13b64fc9346329b',ITER=310000,MAN='1500497ec1fa2f7d',CHECK='065cdb95ed21110dd20151c4ccaf206e271445a1ed606600c168a625c9afc6b3396351961b307d9792fb61',KEYNAME='rw-key-'+SALT.slice(0,8);
+const SALT='970b86c8c7b8f5a268e76ddea510ac12',ITER=310000,MAN='cb309e1939bdb10b',CHECK='0a54414e8df415e6dd0941cbfac5d4bc6d9b66c3283512d6e616eed6f39543629d4b613068a2b466669384',KEYNAME='rw-key-'+SALT.slice(0,8);
 const hex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
 const b64=u=>btoa(String.fromCharCode(...u)),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-const TYPES={ttf:'font/ttf',webp:'image/webp',png:'image/png',jpg:'image/jpeg'};
+const TYPES={ttf:'font/ttf',webp:'image/webp',png:'image/png',jpg:'image/jpeg',js:'text/javascript',json:'application/json'};
 async function derive(pw){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
   return crypto.subtle.deriveKey({name:'PBKDF2',salt:hex(SALT),iterations:ITER,hash:'SHA-256'},base,{name:'AES-GCM',length:256},true,['decrypt'])}
 async function dec(key,buf){const u=new Uint8Array(buf);return crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(0,12)},key,u.slice(12))}
