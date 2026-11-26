@@ -34,7 +34,7 @@ button[disabled]{opacity:.6;cursor:wait}
 </form>
 <script>
 {
-const SALT='9f9860c0aea6ca6a20d960d60a2fd459',ITER=310000,MAN='804bcfabaa1465e6',CHECK='43cadd894ad926cf4665c4f063ecdc6a70da001fea0878d9bd33684e96f3c4e66d8b7e0f6359c69265c059',KEYNAME='rw-key-'+SALT.slice(0,8);
+const SALT='048ce39058b90bc756f35a4daa93b0fa',ITER=310000,MAN='6548d3b747d26d7b',CHECK='caed3a7cf80ede28e41f7bdc407810a79fb3973d2902e8c59b060aaa865e70fc225beb1c261a964e4a83ef',KEYNAME='rw-key-'+SALT.slice(0,8);
 const hex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
 const b64=u=>btoa(String.fromCharCode(...u)),unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const TYPES={ttf:'font/ttf',webp:'image/webp',png:'image/png',jpg:'image/jpeg',js:'text/javascript',json:'application/json'};
